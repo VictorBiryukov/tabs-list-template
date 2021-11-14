@@ -1,0 +1,74 @@
+fragment RootEntityAttributes on _E_RootEntity {
+  id
+  __typename
+  name
+  rootEntityDate
+}
+
+query searchRootEntity {
+  searchRootEntity {
+    elems {
+      ...RootEntityAttributes
+    }
+  }
+}
+
+mutation createRootEntity($input: _CreateRootEntityInput!) {
+  packet {
+    createRootEntity(input: $input) {
+      ...RootEntityAttributes
+    }
+  }
+}
+
+mutation updateRootEntity($input: _UpdateRootEntityInput!) {
+  packet {
+    updateRootEntity(input: $input) {
+      ...RootEntityAttributes
+    }
+  }
+}
+
+mutation deleteRootEntity($id: ID!) {
+  packet {
+    deleteRootEntity(id:$id)
+  }
+}
+
+fragment ChildEntityAttributes on _E_ChildEntity {
+  id
+  __typename
+  name
+}
+
+query searchChildEntity($cond: String) {
+  searchChildEntity(cond: $cond) {
+    elems {
+      ...ChildEntityAttributes
+    }
+  }
+}
+
+mutation createChildEntity($input: _CreateChildEntityInput!) {
+  packet {
+    createChildEntity(input: $input) {
+      ...ChildEntityAttributes
+    }
+  }
+}
+
+mutation updateChildEntity($input: _UpdateChildEntityInput!) {
+  packet {
+    updateChildEntity(input: $input) {
+      ...ChildEntityAttributes
+    }
+  }
+}
+
+mutation deleteChildEntity($id: ID!) {
+  packet {
+    deleteChildEntity(id:$id)
+  }
+}
+
+
