@@ -26,7 +26,6 @@ export const RootEntityTabs: FC = () => {
     const [showForm, setShowForm] = useState<ShowForm>(ShowForm.None)
     const [inputParameters, setInputParameters] = useState<InputParameters>({})
 
-
     const { data, loading, error } = useSearchRootEntityQuery()
     const rootEntityList = data?.searchRootEntity.elems
 
@@ -85,7 +84,10 @@ export const RootEntityTabs: FC = () => {
     return (
         <>
             <Button style={{ margin: "20px" }}
-                onClick={() => setShowForm(ShowForm.Create)}>
+                onClick={() => {
+                    setInputParameters({})
+                    setShowForm(ShowForm.Create)
+                }}>
                 Add new rootEntity
             </Button>
             <Modal visible={showForm != ShowForm.None}
@@ -93,26 +95,26 @@ export const RootEntityTabs: FC = () => {
                 onOk={() => {
                     if (showForm == ShowForm.Create) {
 
-                    createRootEntityMutation({
-                        variables: {
-                            input: inputParameters
-                        },
-                        update: (store, result) => {
-                            store.writeQuery({
-                                query: SearchRootEntityDocument,
-                                data: {
-                                    searchRootEntity: {
-                                        elems: [, ...rootEntityList!, result.data?.packet?.createRootEntity]
+                        createRootEntityMutation({
+                            variables: {
+                                input: inputParameters
+                            },
+                            update: (store, result) => {
+                                store.writeQuery({
+                                    query: SearchRootEntityDocument,
+                                    data: {
+                                        searchRootEntity: {
+                                            elems: [, ...rootEntityList!, result.data?.packet?.createRootEntity]
+                                        }
                                     }
-                                }
-                            })
-                        }
-                    })
-                } else if (showForm == ShowForm.Update) {
-                    updateRootEntityMutation({ variables: { input: Object.assign(inputParameters) as _UpdateRootEntityInput } })
-                }
-                setShowForm(ShowForm.None)
-            }}
+                                })
+                            }
+                        })
+                    } else if (showForm == ShowForm.Update) {
+                        updateRootEntityMutation({ variables: { input: Object.assign(inputParameters) as _UpdateRootEntityInput } })
+                    }
+                    setShowForm(ShowForm.None)
+                }}
             >
                 <Form>
                     <Form.Item>
@@ -123,8 +125,11 @@ export const RootEntityTabs: FC = () => {
                     </Form.Item>
                     <Form.Item>
                         <DatePicker placeholder="RootEntity Date"
-                         value={moment(inputParameters.rootEntityDate,"YYYY-MM-DD")}
+                            //defaultValue={moment()}
+                            value={inputParameters.rootEntityDate ? moment(inputParameters.rootEntityDate, "YYYY-MM-DD") : null}
+                            //value={inputParameters.rootEntityDate}
                             onChange={moment => changeInputParameters({ rootEntityDate: moment?.format("YYYY-MM-DD") })}
+                            format="YYYY-MM-DD"
 
                         />
                     </Form.Item>
