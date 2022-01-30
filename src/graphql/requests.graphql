@@ -1,74 +1,141 @@
-fragment RootEntityAttributes on _E_RootEntity {
+fragment ProjectAttributes on _E_Project {
   id
   __typename
   name
-  rootEntityDate
+  createDate
 }
 
-query searchRootEntity {
-  searchRootEntity {
+query searchProject {
+  searchProject {
     elems {
-      ...RootEntityAttributes
+      ...ProjectAttributes
+      __typename
     }
+    __typename
   }
 }
 
-mutation createRootEntity($input: _CreateRootEntityInput!) {
+mutation createProject($input: _CreateProjectInput!) {
   packet {
-    createRootEntity(input: $input) {
-      ...RootEntityAttributes
+    createProject(input: $input) {
+      ...ProjectAttributes
+      __typename
     }
+    __typename
   }
 }
 
-mutation updateRootEntity($input: _UpdateRootEntityInput!) {
+mutation updateProject($input: _UpdateProjectInput!) {
   packet {
-    updateRootEntity(input: $input) {
-      ...RootEntityAttributes
+    updateProject(input: $input) {
+      ...ProjectAttributes
+      __typename
     }
+    __typename
   }
 }
 
-mutation deleteRootEntity($id: ID!) {
+mutation deleteProject($id: ID!) {
   packet {
-    deleteRootEntity(id:$id)
+    deleteProject(id:$id)
+    __typename
   }
 }
 
-fragment ChildEntityAttributes on _E_ChildEntity {
+fragment MemberAttributes on _E_Member {
   id
   __typename
   name
+  roles{
+    elems
+    __typename
+  }
 }
 
-query searchChildEntity($cond: String) {
-  searchChildEntity(cond: $cond) {
+query searchMember($cond: String) {
+  searchMember(cond: $cond) {
     elems {
-      ...ChildEntityAttributes
+      ...MemberAttributes
+      __typename
     }
+    __typename
   }
 }
 
-mutation createChildEntity($input: _CreateChildEntityInput!) {
+mutation createMember($input: _CreateMemberInput!) {
   packet {
-    createChildEntity(input: $input) {
-      ...ChildEntityAttributes
+    createMember(input: $input) {
+      ...MemberAttributes
+      __typename
     }
+    __typename
   }
 }
 
-mutation updateChildEntity($input: _UpdateChildEntityInput!) {
+mutation updateMember($input: _UpdateMemberInput!) {
   packet {
-    updateChildEntity(input: $input) {
-      ...ChildEntityAttributes
+    updateMember(input: $input) {
+      ...MemberAttributes
+      __typename
     }
+    __typename
   }
 }
 
-mutation deleteChildEntity($id: ID!) {
+mutation deleteMember($id: ID!) {
   packet {
-    deleteChildEntity(id:$id)
+    deleteMember(id:$id)
+    __typename
   }
 }
 
+fragment TaskAttributes on _E_Task {
+  id
+  __typename
+  name
+  descr
+  owner{
+    id
+    __typename
+    name
+  }
+}
 
+query searchTask($cond: String) {
+  searchTask(cond: $cond) {
+    elems {
+      ...TaskAttributes
+      __typename
+    }
+    __typename
+  }
+}
+
+mutation createTask($input: _CreateTaskInput!) {
+  packet {
+    createTask(input: $input) {
+      ...TaskAttributes
+      __typename
+    }
+    __typename
+  }
+}
+
+mutation updateTask($input: _UpdateTaskInput!) {
+  packet {
+    updateTask(input: $input) {
+      ...TaskAttributes
+      __typename
+    }
+    __typename
+  }
+}
+
+mutation deleteTask($id: ID!) {
+  packet {
+    deleteTask(id:$id)
+    __typename
+  }
+}
+
+[{"name":"createMember","body":"mutation createMember($input: _CreateMemberInput!) {\n  packet {\n    createMember(input: $input) {\n      ...MemberAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment MemberAttributes on _E_Member {\n  id\n  __typename\n  name\n  roles {\n    elems\n    __typename\n  }\n}","emptyConditionFlag":null},{"name":"createProject","body":"mutation createProject($input: _CreateProjectInput!) {\n  packet {\n    createProject(input: $input) {\n      ...ProjectAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment ProjectAttributes on _E_Project {\n  id\n  __typename\n  name\n  createDate\n}","emptyConditionFlag":null},{"name":"createTask","body":"mutation createTask($input: _CreateTaskInput!) {\n  packet {\n    createTask(input: $input) {\n      ...TaskAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment TaskAttributes on _E_Task {\n  id\n  __typename\n  name\n  descr\n  owner {\n    id\n    __typename\n    name\n  }\n}","emptyConditionFlag":null},{"name":"deleteMember","body":"mutation deleteMember($id: ID!) {\n  packet {\n    deleteMember(id: $id)\n    __typename\n  }\n}","emptyConditionFlag":null},{"name":"deleteProject","body":"mutation deleteProject($id: ID!) {\n  packet {\n    deleteProject(id: $id)\n    __typename\n  }\n}","emptyConditionFlag":null},{"name":"deleteTask","body":"mutation deleteTask($id: ID!) {\n  packet {\n    deleteTask(id: $id)\n    __typename\n  }\n}","emptyConditionFlag":null},{"name":"searchMember","body":"query searchMember($cond: String) {\n  searchMember(cond: $cond) {\n    elems {\n      ...MemberAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment MemberAttributes on _E_Member {\n  id\n  __typename\n  name\n  roles {\n    elems\n    __typename\n  }\n}","emptyConditionFlag":null,"checkSelects":[{"conditionValue":"1==1","orderValue":"0","typeName":"Project","description":"s"}]},{"name":"searchProject","body":"query searchProject {\n  searchProject {\n    elems {\n      ...ProjectAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment ProjectAttributes on _E_Project {\n  id\n  __typename\n  name\n  createDate\n}","emptyConditionFlag":null,"checkSelects":[{"conditionValue":"2==2","orderValue":"0","typeName":"Project","description":"simple"}]},{"name":"searchTask","body":"query searchTask($cond: String) {\n  searchTask(cond: $cond) {\n    elems {\n      ...TaskAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment TaskAttributes on _E_Task {\n  id\n  __typename\n  name\n  descr\n  owner {\n    id\n    __typename\n    name\n  }\n}","emptyConditionFlag":null,"checkSelects":[{"conditionValue":"1==1","orderValue":"0","typeName":"Project","description":"s"}]},{"name":"updateMember","body":"mutation updateMember($input: _UpdateMemberInput!) {\n  packet {\n    updateMember(input: $input) {\n      ...MemberAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment MemberAttributes on _E_Member {\n  id\n  __typename\n  name\n  roles {\n    elems\n    __typename\n  }\n}","emptyConditionFlag":null},{"name":"updateProject","body":"mutation updateProject($input: _UpdateProjectInput!) {\n  packet {\n    updateProject(input: $input) {\n      ...ProjectAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment ProjectAttributes on _E_Project {\n  id\n  __typename\n  name\n  createDate\n}","emptyConditionFlag":null},{"name":"updateTask","body":"mutation updateTask($input: _UpdateTaskInput!) {\n  packet {\n    updateTask(input: $input) {\n      ...TaskAttributes\n      __typename\n    }\n    __typename\n  }\n}\n    fragment TaskAttributes on _E_Task {\n  id\n  __typename\n  name\n  descr\n  owner {\n    id\n    __typename\n    name\n  }\n}","emptyConditionFlag":null}]

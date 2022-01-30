@@ -1,0 +1,6 @@
+overwrite: true
+schema: http://localhost:8081/graphql
+documents: './src/**/*.graphql'
+generates:
+  requests-for-merge.json:
+    - perm-plugin.js

@@ -1,5 +1,5 @@
 overwrite: true # флаг перезаписи файла генерации
-schema: 'schema.graphql' # файл graphql-схемы
+schema: http://localhost:8081/graphql # файл graphql-схемы
 documents: 'src/graphql/**/*.graphql' # маска файлов c graphql-запросами
 generates:
   ./src/__generate/graphql-frontend.ts: # результирующий файл генерации

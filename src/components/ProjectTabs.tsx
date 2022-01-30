@@ -2,8 +2,9 @@ import React, { FC, useState } from 'react'
 import { Button, DatePicker, Form, Input, Modal, Spin, Tabs } from 'antd'
 import moment from 'moment';
 
-import { useSearchRootEntityQuery, SearchRootEntityDocument, RootEntityAttributesFragment, useCreateRootEntityMutation, useUpdateRootEntityMutation, useDeleteRootEntityMutation, _UpdateRootEntityInput } from '../__generate/graphql-frontend'
-import { ChildEntityList } from './ChildEntityList'
+import { useSearchProjectQuery, SearchProjectDocument, ProjectAttributesFragment, useCreateProjectMutation, useUpdateProjectMutation, useDeleteProjectMutation, _UpdateProjectInput } from '../__generate/graphql-frontend'
+import { TaskList } from './TaskList'
+import { MemberList } from './MemberList';
 
 const { TabPane } = Tabs
 
@@ -13,65 +14,74 @@ enum ShowForm {
     Update
 }
 
-type InputParameters = Partial<_UpdateRootEntityInput>
+type InputParameters = Partial<_UpdateProjectInput>
 
-function mapToInput(data: RootEntityAttributesFragment | undefined): InputParameters {
+function mapToInput(data: ProjectAttributesFragment | undefined): InputParameters {
     const result = { ...data }
     delete result.__typename
     return result
 }
 
-export const RootEntityTabs: FC = () => {
+export const ProjectTabs: FC = () => {
 
     const [showForm, setShowForm] = useState<ShowForm>(ShowForm.None)
     const [inputParameters, setInputParameters] = useState<InputParameters>({})
 
-    const { data, loading, error } = useSearchRootEntityQuery()
-    const rootEntityList = data?.searchRootEntity.elems
+    const { data, loading, error } = useSearchProjectQuery()
+    const projectList = data?.searchProject.elems
 
-    const [createRootEntityMutation] = useCreateRootEntityMutation()
-    const [updateRootEntityMutation] = useUpdateRootEntityMutation()
-    const [deleteRootEntityMutation] = useDeleteRootEntityMutation()
+    const [createProjectMutation] = useCreateProjectMutation()
+    const [updateProjectMutation] = useUpdateProjectMutation()
+    const [deleteProjectMutation] = useDeleteProjectMutation()
 
     const changeInputParameters = (params: InputParameters) => {
         var input = { ...inputParameters }
         setInputParameters(Object.assign(input, params))
     }
 
-    const getTabs = (list: typeof rootEntityList) => {
+    const getTabs = (list: typeof projectList) => {
         return (
             list?.map(elem => {
                 return (
                     <TabPane key={elem.id ?? ""} tab={elem.name}>
-                        {elem.rootEntityDate}<p />
+                        {elem.createDate}<p />
                         <Button style={{ margin: "10px" }}
                             onClick={() => {
                                 setInputParameters(mapToInput(elem))
                                 setShowForm(ShowForm.Update)
                             }}
-                        >Edit rootEntity</Button>
+                        >Edit project</Button>
                         <Button style={{ margin: "10px" }}
                             key={elem.id ?? ""}
                             onClick={(e) => {
-                                deleteRootEntityMutation({
+                                deleteProjectMutation({
                                     variables: {
                                         id: elem.id
                                     },
                                     update: (store) => {
                                         store.writeQuery({
-                                            query: SearchRootEntityDocument,
+                                            query: SearchProjectDocument,
                                             data: {
-                                                searchRootEntity: {
-                                                    elems: rootEntityList!.filter(x => x.id !== elem.id)
+                                                searchProject: {
+                                                    elems: projectList!.filter(x => x.id !== elem.id)
                                                 }
                                             }
                                         })
                                     }
                                 })
                             }}
-                        >Delete rootEntity</Button>
-                        <p />
-                        <ChildEntityList rootEntityId={elem.id} />
+                        >Delete project</Button>
+                        <Form style={{ margin: "10px" }}>
+                            <Tabs>
+                                <TabPane key="memberTab" tab="Member list">
+                                    <MemberList projectId={elem.id} ></MemberList>
+                                </TabPane>
+                                <TabPane key="taskTab" tab="Task list">
+                                    <TaskList projectId={elem.id} />
+                                </TabPane>
+                            </Tabs>
+                        </Form>
+
                     </TabPane>
                 )
             })
@@ -88,30 +98,30 @@ export const RootEntityTabs: FC = () => {
                     setInputParameters({})
                     setShowForm(ShowForm.Create)
                 }}>
-                Add new rootEntity
+                Add new project
             </Button>
             <Modal visible={showForm != ShowForm.None}
                 onCancel={() => setShowForm(ShowForm.None)}
                 onOk={() => {
                     if (showForm == ShowForm.Create) {
 
-                        createRootEntityMutation({
+                        createProjectMutation({
                             variables: {
                                 input: inputParameters
                             },
                             update: (store, result) => {
                                 store.writeQuery({
-                                    query: SearchRootEntityDocument,
+                                    query: SearchProjectDocument,
                                     data: {
-                                        searchRootEntity: {
-                                            elems: [, ...rootEntityList!, result.data?.packet?.createRootEntity]
+                                        searchProject: {
+                                            elems: [, ...projectList!, result.data?.packet?.createProject]
                                         }
                                     }
                                 })
                             }
                         })
                     } else if (showForm == ShowForm.Update) {
-                        updateRootEntityMutation({ variables: { input: Object.assign(inputParameters) as _UpdateRootEntityInput } })
+                        updateProjectMutation({ variables: { input: Object.assign(inputParameters) as _UpdateProjectInput } })
                     }
                     setShowForm(ShowForm.None)
                 }}
@@ -124,11 +134,11 @@ export const RootEntityTabs: FC = () => {
                         />
                     </Form.Item>
                     <Form.Item>
-                        <DatePicker placeholder="RootEntity Date"
+                        <DatePicker placeholder="Project Date"
                             //defaultValue={moment()}
-                            value={inputParameters.rootEntityDate ? moment(inputParameters.rootEntityDate, "YYYY-MM-DD") : null}
-                            //value={inputParameters.rootEntityDate}
-                            onChange={moment => changeInputParameters({ rootEntityDate: moment?.format("YYYY-MM-DD") })}
+                            value={inputParameters.createDate ? moment(inputParameters.createDate, "YYYY-MM-DD") : null}
+                            //value={inputParameters.createDate}
+                            onChange={moment => changeInputParameters({ createDate: moment?.format("YYYY-MM-DD") })}
                             format="YYYY-MM-DD"
 
                         />
@@ -138,7 +148,7 @@ export const RootEntityTabs: FC = () => {
             <Form style={{ margin: "10px" }}>
                 <Form.Item>
                     <Tabs>
-                        {getTabs(rootEntityList)}
+                        {getTabs(projectList)}
                     </Tabs>
                 </Form.Item>
             </Form>

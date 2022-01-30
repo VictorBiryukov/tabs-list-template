@@ -1,0 +1,8 @@
+{
+    "realm": "erp_simple",
+    "auth-server-url": "http://localhost:8180/auth/",
+    "ssl-required": "external",
+    "resource": "erp_simple",
+    "public-client": true,
+    "confidential-port": 0
+}

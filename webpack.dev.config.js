@@ -1,5 +1,6 @@
 var path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 const { HotModuleReplacementPlugin } = require("webpack");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { createProxyMiddleware } = require('http-proxy-middleware');
@@ -14,9 +15,12 @@ module.exports = {
     mode: 'development',
     output: {
         filename: "bundle.js",
+        path: path.resolve(__dirname, 'target/dist'),        
         publicPath: "/",
     },
     devServer: {
+        contentBase: path.resolve(__dirname, 'target/dist'),
+        historyApiFallback: true,
         hot: true,
         port: 3000,
         before: (app) => {
@@ -24,7 +28,7 @@ module.exports = {
                 {
                     target: process.env.DS_ENDPOINT,
                     changeOrigin: true,
-                    secure: false,
+                    secure: true,
                     pathRewrite: { '/graphql': '' }
                 }));
         },
@@ -36,9 +40,21 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HotModuleReplacementPlugin(),
-        new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "public/index.html"), //we put the file that we created in public folder
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
         }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: 'public',
+                },
+            ]}),
+
+            new HtmlWebpackPlugin({
+                template: './template/index.html',
+                minify: false,
+                excludeChunks: ['theme-light', 'theme-dark', 'theme-docs'],
+            }),
     ],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json', '.css', '.env']

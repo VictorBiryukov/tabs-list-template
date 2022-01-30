@@ -10,8 +10,6 @@ export const App: FC = () => {
 
     const [showLoginPage, setShowLoginPage] = useState<boolean>(false)
     const [appAddress, setAppAddress] = useState<string>(localStorage.getItem("appAddress") as string)
-    const [appKey, setAppKey] = useState<string>(localStorage.getItem("appKey") as string)
-    const [appSecret, setAppSecret] = useState<string>(localStorage.getItem("appSecret") as string)
     const initApolloClient = useRef<boolean>(true)
 
     return (
@@ -23,10 +21,8 @@ export const App: FC = () => {
                 <Modal visible={showLoginPage}
                     onCancel={() => setShowLoginPage(false)}
                     onOk={() => {
-                        if (appAddress && appKey && appSecret) {
+                        if (appAddress) {
                             localStorage.setItem("appAddress", appAddress)
-                            localStorage.setItem("appKey", appKey)
-                            localStorage.setItem("appSecret", appSecret)
                             setShowLoginPage(false)
                             initApolloClient.current = true
                         }
@@ -39,23 +35,11 @@ export const App: FC = () => {
                                 onChange={e => setAppAddress(e.target.value)}
                             />
                         </Form.Item>
-                        <Form.Item>
-                            <Input placeholder="Service key"
-                                value={appKey}
-                                onChange={e => setAppKey(e.target.value)}
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Input.Password placeholder="Service secret"
-                                value={appSecret}
-                                onChange={e => setAppSecret(e.target.value)}
-                            />
-                        </Form.Item>
                     </Form>
                 </Modal>
             </Header>
             <Content>
-                <AppProvider appAddress={appAddress} appKey={appKey} appSecret={appSecret}
+                <AppProvider appAddress={appAddress}
                     initApolloClient={initApolloClient} />
             </Content>
         </Layout>
