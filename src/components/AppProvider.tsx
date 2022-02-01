@@ -2,7 +2,7 @@ import React, { FC, MutableRefObject, useState, useEffect } from 'react';
 import { ApolloClient, ApolloProvider, HttpLink, NormalizedCacheObject, useApolloClient } from '@apollo/client';
 
 import { cache } from '../cache'
-import { ProjectTabs } from './ProjectTabs'
+import { AppTabs } from './AppTabs'
 
 import { AppContext, UserInfo } from "./AppContext"
 
@@ -50,7 +50,7 @@ export const AppProvider: FC<ServiceData> = ({ appAddress, initApolloClient }) =
         return (
           <AppContext.Provider value={{ keycloak: keycloak, userInfo: userInfo }}>
             <ApolloProvider client={apolloClient!}>
-              <ProjectTabs />
+              <AppTabs />
             </ApolloProvider>
           </AppContext.Provider>
         )
