@@ -17,9 +17,7 @@ query searchGoodType {
   searchGoodType {
     elems {
       ...GoodTypeAttributes
-      __typename
     }
-    __typename
   }
 }
 
@@ -29,7 +27,6 @@ fragment DetailAttributes on _E_Detail {
       goodType {
         entity {
           ...GoodTypeAttributes
-          __typename
         }
       }  
 }
@@ -54,9 +51,8 @@ query searchOrder($cond: String) {
   searchOrder(cond: $cond, sort:{crit:"it.orderDate", order:DESC} ) {
     elems {
       ...OrderAttributes
-      __typename
     }
-    __typename
+
   }
 }
 

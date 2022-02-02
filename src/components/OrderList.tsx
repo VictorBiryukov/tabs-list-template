@@ -50,10 +50,14 @@ export const OrderList: FC = () => {
 
     const excludeDeletedDetail = (listBeforeDelete: typeof orderList, detailId: string, orderId: string) => {
 
-    
-        const orderIndex = listBeforeDelete!.findIndex(x => x.id == orderId)
-
-        return listBeforeDelete
+        return listBeforeDelete!.map(x => {
+            if (x.id != orderId) { return x }
+            else {
+                const y = { ...x }
+                y.details = { elems: y.details.elems.filter(z => z.id != detailId)}
+                return y
+            }
+        })
 
     }
 
@@ -73,17 +77,17 @@ export const OrderList: FC = () => {
                                     variables: {
                                         detailId: elem.id
                                     },
-                                    // update: (store) => {
-                                    //     store.writeQuery({
-                                    //         query: SearchOrderDocument,
-                                    //         variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.preferred_username + "'" },
-                                    //         data: {
-                                    //             searchOrder: {
-                                    //                 elems: excludeDeletedDetail(orderList, elem.id, orderId)
-                                    //             }
-                                    //         }
-                                    //     })
-                                    // }
+                                    update: (store) => {
+                                        store.writeQuery({
+                                            query: SearchOrderDocument,
+                                            variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.preferred_username + "'" },
+                                            data: {
+                                                searchOrder: {
+                                                    elems: excludeDeletedDetail(orderList, elem.id, orderId)
+                                                }
+                                            }
+                                        })
+                                    }
                                 })
                             }}
                         >
@@ -105,6 +109,7 @@ export const OrderList: FC = () => {
                             <Form layout="inline">
                                 <Item><Tag color="blue">{order.statusForCUSTOMER?.code}</Tag></Item>
                                 <Item>{"Order create date: " + (order.orderDate as string).substring(0, 10)}</Item>
+                                {/* <Item>{"Order create date: " + order.orderDate}</Item> */}
                                 <Item>{"Order number: " + order.id}</Item>
                             </Form>
                         )}
@@ -116,7 +121,7 @@ export const OrderList: FC = () => {
                         key={order.statusForCUSTOMER?.code == "DRAFT" ? "DRAFT" : order.id}>
                         <Table
                             columns={columns}
-                            dataSource={detailsTable(order.details.elems, order.id)}
+                            dataSource={detailsTable(order?.details?.elems, order.id)}
                         />
                     </Panel>
                 )

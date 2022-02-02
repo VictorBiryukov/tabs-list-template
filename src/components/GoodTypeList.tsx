@@ -60,9 +60,12 @@ export const GoodTypeList: FC = () => {
         const result = { ...addResult.packet?.updateOrCreateOrder?.returning }
         result.details?.elems.push({ ...addResult.packet?.createDetail! })
         
-        return (
-            [, result, listBeforeAdd?.filter(x => x.id != result.id)]
-        )
+        if (listBeforeAdd?.length! > 0) {
+            return [result, ...listBeforeAdd!.filter(x => x.id != result.id)]
+        } else {
+            return [result]
+        }
+
     }
 
 
@@ -113,7 +116,7 @@ export const GoodTypeList: FC = () => {
 
     return (
         <>
-            <Table
+            <Table 
                 columns={columns}
                 dataSource={mapToView(goodtypeList)}
             />
