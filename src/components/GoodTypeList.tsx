@@ -84,7 +84,7 @@ export const GoodTypeList: FC = () => {
                             onClick={() => {
                                 addOrderDetailMutation({
                                     variables: {
-                                        customerId: appContext.userInfo?.preferred_username!,
+                                        customerId: appContext.userInfo?.email,
                                         goodTypeId: elem.id
                                     },
                                     update: (store, result) => {

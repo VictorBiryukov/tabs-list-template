@@ -52,7 +52,6 @@ query searchOrder($cond: String) {
     elems {
       ...OrderAttributes
     }
-
   }
 }
 
