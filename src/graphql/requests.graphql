@@ -1,3 +1,30 @@
+fragment CustomerAttributes on _E_Customer {
+  id
+  __typename
+	data {
+    name
+    address
+  }
+}
+
+mutation addCustomerInfo($customerInput: _CreateCustomerInput!) {
+  packet {
+    updateOrCreateCustomer(input: $customerInput) {
+      returning {
+        ...CustomerAttributes
+      }
+    }
+  }
+}
+
+query getCustomerInfo($cond: String!) {
+  searchCustomer(cond: $cond){
+    elems {
+      ...CustomerAttributes
+    }
+  }
+}
+
 fragment GoodTypeAttributes on _E_GoodType {
   id
   __typename
@@ -50,6 +77,17 @@ fragment OrderAttributes on _E_Order {
 query searchOrder($cond: String) {
   searchOrder(cond: $cond, sort:{crit:"it.orderDate", order:DESC} ) {
     elems {
+      ...OrderAttributes
+    }
+  }
+}
+
+query searchAllOrder{
+  searchOrder(sort:{crit:"it.customer.entityId", order:DESC} ) {
+    elems {
+      customer{
+        entityId
+      }
       ...OrderAttributes
     }
   }
