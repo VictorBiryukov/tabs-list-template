@@ -84,13 +84,13 @@ export const GoodTypeList: FC = () => {
                             onClick={() => {
                                 addOrderDetailMutation({
                                     variables: {
-                                        customerId: appContext.userInfo?.email,
+                                        customerId: appContext.userInfo!.email!,
                                         goodTypeId: elem.id
                                     },
                                     update: (store, result) => {
                                         store.writeQuery({
                                             query: SearchOrderDocument,
-                                            variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.preferred_username + "'" },
+                                            variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.email + "'" },
                                             data: {
                                                 searchOrder: {
                                                    elems: concatResult(orderList!,result!.data!)

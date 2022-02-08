@@ -42,7 +42,7 @@ export const OrderList: FC = () => {
 
     const appContext = useAppContext()
 
-    const { data, loading, error } = useSearchOrderQuery({ variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.preferred_username + "'" } })
+    const { data, loading, error } = useSearchOrderQuery({ variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.email + "'" } })
     const orderList = data?.searchOrder.elems
 
     const [fixOrderMutation] = useFixOrderMutation()
@@ -80,7 +80,7 @@ export const OrderList: FC = () => {
                                     update: (store) => {
                                         store.writeQuery({
                                             query: SearchOrderDocument,
-                                            variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.preferred_username + "'" },
+                                            variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.email + "'" },
                                             data: {
                                                 searchOrder: {
                                                     elems: excludeDeletedDetail(orderList, elem.id, orderId)
