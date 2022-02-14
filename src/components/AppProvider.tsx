@@ -2,7 +2,7 @@ import React, { FC, MutableRefObject } from 'react';
 import { ApolloClient, ApolloProvider, HttpLink, NormalizedCacheObject, useApolloClient } from '@apollo/client';
 
 import { cache } from '../cache'
-import { RootEntityTabs } from './RootEntityTabs'
+import { DictionaryTabs } from './DictionaryTabs'
 
 const { fetch } = require('cross-fetch')
 const signer = require('../signer-sdk/signer.js')
@@ -55,7 +55,7 @@ export const AppProvider: FC<ServiceData> = ({ appAddress, appKey, appSecret, in
   if (apolloClient) {
     return (
       <ApolloProvider client={apolloClient!}>
-        <RootEntityTabs />
+        <DictionaryTabs />
       </ApolloProvider>
     )
   } else {

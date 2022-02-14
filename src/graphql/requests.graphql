@@ -1,73 +1,64 @@
-fragment RootEntityAttributes on _E_RootEntity {
+fragment DictionaryAttributes on _E_Dictionary {
   id
   __typename
   name
-  rootEntityDate
+  descr
 }
 
-query searchRootEntity {
-  searchRootEntity {
+query searchDictionary {
+  searchDictionary {
     elems {
-      ...RootEntityAttributes
+      ...DictionaryAttributes
+      words{
+        count
+      }
     }
   }
 }
 
-mutation createRootEntity($input: _CreateRootEntityInput!) {
+mutation updateOrCreateDictionary($input: _CreateDictionaryInput!) {
   packet {
-    createRootEntity(input: $input) {
-      ...RootEntityAttributes
+    updateOrCreateDictionary(input: $input) {
+      returning {
+        ...DictionaryAttributes
+      }
     }
   }
 }
 
-mutation updateRootEntity($input: _UpdateRootEntityInput!) {
+mutation deleteDictionary($id: ID!) {
   packet {
-    updateRootEntity(input: $input) {
-      ...RootEntityAttributes
-    }
+    deleteDictionary(id:$id)
   }
 }
 
-mutation deleteRootEntity($id: ID!) {
-  packet {
-    deleteRootEntity(id:$id)
-  }
-}
-
-fragment ChildEntityAttributes on _E_ChildEntity {
+fragment WordAttributes on _E_Word {
   id
   __typename
-  name
+  lettersCnt
 }
 
-query searchChildEntity($cond: String) {
-  searchChildEntity(cond: $cond) {
+query searchWord($limit: Int!, $cond: String) {
+  searchWord(cond: $cond, offset: 0, limit: $limit, sort:{crit:"it.$id"}) {
     elems {
-      ...ChildEntityAttributes
+      ...WordAttributes
     }
   }
 }
 
-mutation createChildEntity($input: _CreateChildEntityInput!) {
+mutation updateOrCreateWord($input: _CreateWordInput!) {
   packet {
-    createChildEntity(input: $input) {
-      ...ChildEntityAttributes
+    updateOrCreateWord(input: $input) {
+      returning {
+        ...WordAttributes
+      }
     }
   }
 }
 
-mutation updateChildEntity($input: _UpdateChildEntityInput!) {
+mutation deleteWord($id: ID!) {
   packet {
-    updateChildEntity(input: $input) {
-      ...ChildEntityAttributes
-    }
-  }
-}
-
-mutation deleteChildEntity($id: ID!) {
-  packet {
-    deleteChildEntity(id:$id)
+    deleteWord(id:$id)
   }
 }
 
