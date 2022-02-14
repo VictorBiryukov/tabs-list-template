@@ -51,6 +51,9 @@ export const AppTabs: FC = () => {
                 <Button onClick={() => setShowForm(ShowForm.Update)}>
                     {appContext.userInfo?.preferred_username + " personal data"}
                 </Button>
+                <Button onClick={() => appContext.keycloak?.logout()} style={{left:"85%"}}>
+                    {"Logout"}
+                </Button>
                 <Modal visible={showForm != ShowForm.None}
                     onCancel={() => setShowForm(ShowForm.None)}
                     onOk={() => {

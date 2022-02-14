@@ -50,7 +50,7 @@ export const GoodTypeList: FC = () => {
     const { data, loading, error } = useSearchGoodTypeQuery()
     const goodtypeList = data?.searchGoodType.elems
 
-    const { data: dataO, loading: loadingO, error: errorO } = useSearchOrderQuery({ variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.preferred_username + "'" } })
+    const { data: dataO, loading: loadingO, error: errorO } = useSearchOrderQuery({ variables: { cond: "it.customer.entityId == '" + appContext.userInfo?.email + "'" } })
     const orderList = dataO?.searchOrder.elems
 
     const [addOrderDetailMutation] = useAddOrderDetailMutation()
