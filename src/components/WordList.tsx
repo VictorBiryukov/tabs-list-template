@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 import { gql, useApolloClient } from '@apollo/client';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-import { Button, Col, Form, Input, Modal, Row, Select, Spin, Table, Upload, UploadProps } from 'antd'
+import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Spin, Table, Upload, UploadProps } from 'antd'
 
 import { useSearchWordQuery, SearchWordDocument, WordAttributesFragment, useUpdateOrCreateWordMutation, useDeleteWordMutation, _CreateWordInput, _CreateDictionaryInput } from '../__generate/graphql-frontend'
 
@@ -47,7 +47,7 @@ function mapToInput(data: WordAttributesFragment | undefined): InputParameters {
 
 export const WordList: FC<WordListProps> = ({ dictionaryId }) => {
 
-    const uploadPacketSize = 128
+    const [uploadPacketSize, setUploadPacketSize] = useState<number>(128)
 
     const client = useApolloClient()
 
@@ -197,6 +197,12 @@ export const WordList: FC<WordListProps> = ({ dictionaryId }) => {
                     </Col>
                     <Col span={4}>
                         <Search placeholder="input search text" onSearch={(value) => setInputSearch(value)} enterButton />
+                    </Col>
+                    <Col>
+                        <InputNumber placeholder="UploadPacketSize"
+                            value={uploadPacketSize}
+                            onChange={value => setUploadPacketSize(value)}
+                        />
                     </Col>
                     <Col span={3}>
                         <Upload {...parseAndUploadWords} maxCount={1}>
