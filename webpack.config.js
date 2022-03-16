@@ -29,7 +29,7 @@ module.exports = {
         }),
     ],
     output: {
-        path: path.resolve(__dirname, './fn-admin-frontend/static/'),
+        path: path.resolve(__dirname, './fn/static/'),
         filename: "js/" + filenameF('js'),
     },
     module: {
